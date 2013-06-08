@@ -32,85 +32,116 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class WordCount {
-	
+
 	private final static String mapSleepKey = "com.uc.qiujw.map.sleep";
 	private final static String reduceSleepKey = "com.uc.qiujw.reduce.sleep";
-	
-  public static class TokenizerMapper 
-       extends Mapper<Object, Text, Text, IntWritable>{
-    
-    private final static IntWritable one = new IntWritable(1);
-    private Text word = new Text();
-      
-    public void map(Object key, Text value, Context context
-                    ) throws IOException, InterruptedException {
-      StringTokenizer itr = new StringTokenizer(value.toString());
-      printMem();
-      int mapSleep = context.getConfiguration().getInt(mapSleepKey, 1);
-      System.out.print(mapSleep);
-      Thread.sleep(mapSleep*1000);
-      
-      while (itr.hasMoreTokens()) {
-        word.set(itr.nextToken());
-        context.write(word, one);
-      }
-      printMem();
-    }
-  }
-  
-  public static class IntSumReducer 
-       extends Reducer<Text,IntWritable,Text,IntWritable> {
-    private IntWritable result = new IntWritable();
 
-    public void reduce(Text key, Iterable<IntWritable> values, 
-                       Context context
-                       ) throws IOException, InterruptedException {
-      printMem();
-      int reduceSleep = context.getConfiguration().getInt(reduceSleepKey, 1);
-      System.out.print(reduceSleep);
-      Thread.sleep(reduceSleep*1000);
-      
-      int sum = 0;
-      for (IntWritable val : values) {
-        sum += val.get();
-      }
-      result.set(sum);
-      context.write(key, result);
-      printMem();
-    }
-  }
+	public static class TokenizerMapper extends
+			Mapper<Object, Text, Text, IntWritable> {
 
-  public static void main(String[] args) throws Exception {
-    Configuration conf = new Configuration();
-    String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-    
-    System.err.println("Usage: wordcount  <in> <out> <map_sleep> <reduce_sleep>");
+		private final static IntWritable one = new IntWritable(1);
+		private Text word = new Text();
 
-    Job job = Job.getInstance(conf, "word count");
-    job.setJarByClass(WordCount.class);
-    job.setMapperClass(TokenizerMapper.class);
-    job.setCombinerClass(IntSumReducer.class);
-    job.setReducerClass(IntSumReducer.class);
-    job.setOutputKeyClass(Text.class);
-    job.setOutputValueClass(IntWritable.class);
-    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
-    int mapSleep = 1,reduceSleep = 1;
-    if( otherArgs.length > 2 ){
-    	mapSleep = Integer.valueOf(otherArgs[2]);
-    }
-    if( otherArgs.length > 3 ){
-    	reduceSleep = Integer.valueOf(otherArgs[3]);
-    }
-    conf.set(mapSleepKey, Integer.toString(mapSleep));
-    conf.set(reduceSleepKey, Integer.toString(reduceSleep));
-    System.exit(job.waitForCompletion(true) ? 0 : 1);
-  }
-  
-  public static void printMem(){
-	  Runtime r = Runtime.getRuntime();
-	  long total = r.totalMemory();
-	  long free = r.freeMemory();
-	  System.out.println("total:"+total+" free:"+free);
-  }
+		@Override
+		public void setup(Context context) throws IOException,
+				InterruptedException {
+			printMem();
+			int mapSleep = context.getConfiguration().getInt(mapSleepKey, 10);
+			System.out.print(mapSleep);
+			Thread.sleep(mapSleep * 1000);
+		}
+
+		@Override
+		public void map(Object key, Text value, Context context)
+				throws IOException, InterruptedException {
+			StringTokenizer itr = new StringTokenizer(value.toString());
+			while (itr.hasMoreTokens()) {
+				word.set(itr.nextToken());
+				context.write(word, one);
+			}
+		}
+
+		@Override
+		public void cleanup(Context context) throws IOException,
+				InterruptedException {
+			printMem();
+			int mapSleep = context.getConfiguration().getInt(mapSleepKey, 10);
+			System.out.print(mapSleep);
+			Thread.sleep(mapSleep * 1000);
+		}
+
+	}
+
+	public static class IntSumReducer extends
+			Reducer<Text, IntWritable, Text, IntWritable> {
+		private IntWritable result = new IntWritable();
+
+		@Override
+		protected void setup(Context context) throws IOException,
+				InterruptedException {
+			printMem();
+			int reduceSleep = context.getConfiguration().getInt(reduceSleepKey,
+					1);
+			System.out.print(reduceSleep);
+			Thread.sleep(reduceSleep * 1000);
+		}
+
+		public void reduce(Text key, Iterable<IntWritable> values,
+				Context context) throws IOException, InterruptedException {
+			int sum = 0;
+			for (IntWritable val : values) {
+				sum += val.get();
+			}
+			result.set(sum);
+			context.write(key, result);
+		}
+
+		@Override
+		public void cleanup(Context context) throws IOException,
+				InterruptedException {
+			printMem();
+			int reduceSleep = context.getConfiguration().getInt(reduceSleepKey,
+					1);
+			System.out.print(reduceSleep);
+			Thread.sleep(reduceSleep * 1000);
+		}
+
+	}
+
+	public static void main(String[] args) throws Exception {
+		Configuration conf = new Configuration();
+		String[] otherArgs = new GenericOptionsParser(conf, args)
+				.getRemainingArgs();
+
+		System.err
+				.println("Usage: wordcount  <in> <out> <map_sleep> <reduce_sleep>");
+
+		Job job = Job.getInstance(conf, "word count");
+		job.setJarByClass(WordCount.class);
+		job.setMapperClass(TokenizerMapper.class);
+		job.setCombinerClass(IntSumReducer.class);
+		job.setReducerClass(IntSumReducer.class);
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+		int mapSleep = 1, reduceSleep = 1;
+		if (otherArgs.length > 2) {
+			mapSleep = Integer.valueOf(otherArgs[2]);
+		}
+		if (otherArgs.length > 3) {
+			reduceSleep = Integer.valueOf(otherArgs[3]);
+		}
+		conf.set(mapSleepKey, Integer.toString(mapSleep));
+		conf.set(reduceSleepKey, Integer.toString(reduceSleep));
+		System.exit(job.waitForCompletion(true) ? 0 : 1);
+	}
+
+	public static void printMem() {
+		Runtime r = Runtime.getRuntime();
+		long total = r.totalMemory();
+		long free = r.freeMemory();
+
+		System.out.println("total:" + total + " free:" + free);
+	}
 }
