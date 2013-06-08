@@ -83,10 +83,9 @@ public class WordCount {
   public static void main(String[] args) throws Exception {
     Configuration conf = new Configuration();
     String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
-    if (otherArgs.length != 2) {
-      System.err.println("Usage: wordcount  <in> <out> <map_sleep> <reduce_sleep>");
-      System.exit(2);
-    }
+    
+    System.err.println("Usage: wordcount  <in> <out> <map_sleep> <reduce_sleep>");
+
     Job job = Job.getInstance(conf, "word count");
     job.setJarByClass(WordCount.class);
     job.setMapperClass(TokenizerMapper.class);
