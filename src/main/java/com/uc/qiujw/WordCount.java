@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
@@ -123,8 +124,10 @@ public class WordCount {
 		job.setReducerClass(IntSumReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+		String in = otherArgs[0];
+		String out = otherArgs[1];
+		FileInputFormat.addInputPath(job, new Path(in));
+		FileOutputFormat.setOutputPath(job, new Path(out));
 		int mapSleep = 1, reduceSleep = 1;
 		if (otherArgs.length > 2) {
 			mapSleep = Integer.valueOf(otherArgs[2]);
@@ -134,6 +137,11 @@ public class WordCount {
 		}
 		conf.set(mapSleepKey, Integer.toString(mapSleep));
 		conf.set(reduceSleepKey, Integer.toString(reduceSleep));
+		FileSystem fs = FileSystem.get(conf);
+		Path outPath = new Path(out);
+		if ( fs.exists(outPath) ){
+			fs.delete(outPath,true);
+		}
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 
