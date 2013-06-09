@@ -124,9 +124,11 @@ public class WordCount {
 		job.setReducerClass(IntSumReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
-		String in = otherArgs[0];
+		String[] in = otherArgs[0].split(",");
 		String out = otherArgs[1];
-		FileInputFormat.addInputPath(job, new Path(in));
+		for( String inStr:in){
+			FileInputFormat.addInputPath(job, new Path(inStr));
+		}
 		FileOutputFormat.setOutputPath(job, new Path(out));
 		int mapSleep = 1, reduceSleep = 1;
 		if (otherArgs.length > 2) {
