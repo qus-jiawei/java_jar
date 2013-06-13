@@ -11,12 +11,12 @@ public class Mkdir {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args)
 				.getRemainingArgs();
-		short s = Short.parseShort(otherArgs[0]);
-		FsPermission permission = new FsPermission(s);
+		String mask = otherArgs[0];
+		FsPermission permission = new FsPermission(mask);
 		String path = otherArgs[1];
 		FileSystem fs = FileSystem.get(conf);
 		Path outPath = new Path(path);
-		System.out.println("short:"+s+" path:"+path);
+		System.out.println("mask:"+mask+" path:"+path);
 		fs.mkdirs(outPath, permission);
 	}
 }
