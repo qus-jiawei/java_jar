@@ -9,6 +9,9 @@ public class Main {
 			if ( args[0].toLowerCase().equals("wordcount") ){
 				WordCount.main(Arrays.copyOfRange(args, 1, args.length));
 			}
+			if ( args[0].toLowerCase().equals("mkdir") ){
+				Mkdir.main(Arrays.copyOfRange(args, 1, args.length));
+			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
