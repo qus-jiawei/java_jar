@@ -16,13 +16,16 @@ public class HiveTest implements Run {
 			Configuration conf = new Configuration();
 			GenericOptionsParser parser = new GenericOptionsParser(conf, args);
 			String[] otherArgs = parser.getRemainingArgs();
-			conf.set("mapred.job.queue.name", "root.qiujw1.high");
-//			String host = conf.get("my.hive.host");
-			String host = "platform31";
+			findAndPrint(conf,"mapred.job.queue.name:");
+			findAndPrint(conf,"my.hive.host");
+			findAndPrint(conf,"my.hive.port");
+//			findAndPrint(conf,"my.hive.file");
+			String host = conf.get("my.hive.host");
+//			String host = "platform31";
 			Class.forName(driverName);
 			String sql = "";
 			String filepath = "/home/qiujw1/data/1m";
-			String port = "59000";
+			String port = conf.get("my.hive.port");
 			Connection con = DriverManager.getConnection(
 					"jdbc:hive://"+host+":"+port+"/default", "", "");
 			Statement stmt = con.createStatement();
@@ -78,5 +81,7 @@ public class HiveTest implements Run {
 	public String getKey() {
 		return "hive";
 	}
-
+	public void findAndPrint(Configuration conf,String key){
+		System.out.println(key+":"+conf.get(key));	
+	}
 }
