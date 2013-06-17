@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.hadoop.hive.ql.metadata.Hive;
+
 public class Main {
-	static public Class<Run>[] runArray = new Class[]{Mkdir.class,WordCount.class,CalFairParams.class};
+	static public Class<Run>[] runArray = new Class[]{Mkdir.class,WordCount.class,CalFairParams.class,Hive.class};
 	static public void main(String[] args){
 		try{
 			List<Run> runList = new ArrayList<Run>();
