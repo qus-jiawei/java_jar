@@ -58,7 +58,7 @@ public class HiveTest implements Run {
 			res = stmt.executeQuery(sql);
 
 			// select * query
-			sql = "select * from " + tableName + "limit 10";
+			sql = "select * from " + tableName + " limit 10";
 			System.out.println("Running: " + sql);
 			res = stmt.executeQuery(sql);
 			while (res.next()) {
@@ -66,7 +66,7 @@ public class HiveTest implements Run {
 			}
 
 			// regular hive query 
-			sql = "select count(1) from " + tableName+" where a='a' limit 1";
+			sql = "select count(1) from " + tableName+" where a='a' limit 1 ";
 			System.out.println("Running: " + sql);
 			res = stmt.executeQuery(sql);
 			while (res.next()) {
