@@ -19,12 +19,13 @@ public class HiveTest implements Run {
 			findAndPrint(conf,"mapred.job.queue.name");
 			findAndPrint(conf,"my.hive.host");
 			findAndPrint(conf,"my.hive.port");
+			findAndPrint(conf,"my.hive.file");
 //			findAndPrint(conf,"my.hive.file");
 			String host = conf.get("my.hive.host");
 //			String host = "platform31";
 			Class.forName(driverName);
 			String sql = "";
-			String filepath = "/home/qiujw1/data/1m";
+			String filepath =  conf.get("my.hive.file");
 			String port = conf.get("my.hive.port");
 			Connection con = DriverManager.getConnection(
 					"jdbc:hive://"+host+":"+port+"/default", "", "");
