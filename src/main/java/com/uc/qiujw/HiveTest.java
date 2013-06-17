@@ -57,7 +57,8 @@ public class HiveTest implements Run {
 			System.out.println("Running: " + sql);
 			res = stmt.executeQuery(sql);
 
-			// select * query sql = "select * from " + tableName;
+			// select * query
+			sql = "select * from " + tableName;
 			System.out.println("Running: " + sql);
 			res = stmt.executeQuery(sql);
 			while (res.next()) {
