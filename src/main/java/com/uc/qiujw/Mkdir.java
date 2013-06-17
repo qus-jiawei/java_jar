@@ -6,7 +6,21 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.fs.permission.FsPermission;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class Mkdir {
+public class Mkdir implements Run{
+	public int run(String[] args) {
+		try {
+			Mkdir.main(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 1;
+		}
+		return 0;
+	}
+
+	public String getKey() {
+		return "mkdir";
+	}
+	
 	static public void main(String[] args)throws Exception {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args)
@@ -19,4 +33,6 @@ public class Mkdir {
 		System.out.println("mask:"+mask+" path:"+path);
 		fs.mkdirs(outPath, permission);
 	}
+
+	
 }

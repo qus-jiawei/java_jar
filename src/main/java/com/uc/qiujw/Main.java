@@ -1,20 +1,32 @@
 package com.uc.qiujw;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Main {
+	static public Class<Run>[] runArray = new Class[]{Mkdir.class,WordCount.class,CalFairParams.class};
 	static public void main(String[] args){
 		try{
-			System.out.println(Arrays.toString(args));
-			if ( args[0].toLowerCase().equals("wordcount") ){
-				WordCount.main(Arrays.copyOfRange(args, 1, args.length));
+			List<Run> runList = new ArrayList<Run>();
+			
+			for(Class<Run> c:runArray){
+				runList.add((Run)c.newInstance());
 			}
-			if ( args[0].toLowerCase().equals("mkdir") ){
-				Mkdir.main(Arrays.copyOfRange(args, 1, args.length));
+			String key = args[0].toLowerCase();
+			System.out.println(Arrays.toString(args));
+			for(Run r:runList){
+				if( r.getKey().equalsIgnoreCase(key) ){
+					r.run(Arrays.copyOfRange(args, 1, args.length));
+					break;
+				}
 			}
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+	}
+	static public void init(){
+		
 	}
 }

@@ -32,8 +32,21 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class WordCount {
+public class WordCount implements Run{
+	public int run(String[] args) {
+		try {
+			WordCount.main(args);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return 1;
+		}
+		return 0;
+	}
 
+	public String getKey() {
+		return "wordcount";
+	}
+	
 	private final static String mapSleepKey = "com.uc.qiujw.map.sleep";
 	private final static String reduceSleepKey = "com.uc.qiujw.reduce.sleep";
 
@@ -154,4 +167,6 @@ public class WordCount {
 
 		System.out.println("total:" + total + " free:" + free);
 	}
+
+	
 }
