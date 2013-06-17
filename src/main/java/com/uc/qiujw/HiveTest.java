@@ -16,7 +16,7 @@ public class HiveTest implements Run {
 			Configuration conf = new Configuration();
 			GenericOptionsParser parser = new GenericOptionsParser(conf, args);
 			String[] otherArgs = parser.getRemainingArgs();
-			findAndPrint(conf,"mapred.job.queue.name:");
+			findAndPrint(conf,"mapred.job.queue.name");
 			findAndPrint(conf,"my.hive.host");
 			findAndPrint(conf,"my.hive.port");
 //			findAndPrint(conf,"my.hive.file");
@@ -51,7 +51,7 @@ public class HiveTest implements Run {
 			// load data into table // NOTE: filepath has to be local to the
 			// hive server // NOTE: /tmp/a.txt is a ctrl-A separated file with
 			// two fields per line String filepath = "/tmp/a.txt";
-			sql = "load data local inpath '" + filepath + "' into table "
+			sql = "load data inpath '" + filepath + "' into table "
 					+ tableName;
 			System.out.println("Running: " + sql);
 			res = stmt.executeQuery(sql);
