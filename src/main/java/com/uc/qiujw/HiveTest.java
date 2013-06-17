@@ -17,12 +17,12 @@ public class HiveTest implements Run {
 			GenericOptionsParser parser = new GenericOptionsParser(conf, args);
 			String[] otherArgs = parser.getRemainingArgs();
 			conf.set("mapred.job.queue.name", "root.qiujw1.high");
-			String host = conf.get("my.hive.host");
-			
+//			String host = conf.get("my.hive.host");
+			String host = "platform31";
 			Class.forName(driverName);
 			String sql = "";
 			String filepath = "/home/qiujw1/data/1m";
-			String port = "";
+			String port = "59000";
 			Connection con = DriverManager.getConnection(
 					"jdbc:hive://"+host+":"+port+"/default", "", "");
 			Statement stmt = con.createStatement();
