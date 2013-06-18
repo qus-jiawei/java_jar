@@ -47,7 +47,7 @@ public class HiveTest implements Run {
 			// show tables 
 			
 			//set queue
-			sql = "set mapred.job.queue.name="+queue+";";
+			sql = "set mapred.job.queue.name="+queue;
 			System.out.println(sql);
 			stmt.executeQuery(sql);
 			
