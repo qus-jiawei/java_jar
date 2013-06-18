@@ -21,6 +21,14 @@ public class HiveTest implements Run {
 			findAndPrint(conf,"my.hive.host");
 			findAndPrint(conf,"my.hive.port");
 			findAndPrint(conf,"my.hive.file");
+			findAndPrint(conf,"mapred.job.queue.name");
+			findAndPrint(conf,"mapreduce.job.queue.name");
+			String queue = conf.get("mapred.job.queue.name");
+//			if ( queue==null || queue.length() <1 ){
+//				queue = conf.get("mapreduce.job.queue.name");
+//			}
+			
+//			set mapred.job.queue.name=queue1;
 //			findAndPrint(conf,"my.hive.file");
 			String host = conf.get("my.hive.host");
 //			HiveDriver.class.
@@ -37,6 +45,12 @@ public class HiveTest implements Run {
 //			ResultSet res = stmt.executeQuery("create table " + tableName
 //					+ " (a string, b string, c string)");
 			// show tables 
+			
+			//set queue
+			sql = "set mapred.job.queue.name="+queue+";";
+			System.out.println(sql);
+			stmt.executeQuery(sql);
+			
 			sql = "show tables '" + tableName + "'";
 			System.out.println("Running: " + sql);
 			ResultSet res = stmt.executeQuery(sql);
