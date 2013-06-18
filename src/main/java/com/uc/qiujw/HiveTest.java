@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hive.jdbc.HiveDriver;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class HiveTest implements Run {
@@ -22,10 +23,11 @@ public class HiveTest implements Run {
 			findAndPrint(conf,"my.hive.file");
 //			findAndPrint(conf,"my.hive.file");
 			String host = conf.get("my.hive.host");
+//			HiveDriver.class.
 //			String host = "platform31";
 			Class.forName(driverName);
 			String sql = "";
-			String filepath =  conf.get("my.hive.file");
+//			String filepath =  conf.get("my.hive.file");
 			String port = conf.get("my.hive.port");
 			Connection con = DriverManager.getConnection(
 					"jdbc:hive://"+host+":"+port+"/default", "", "");
@@ -52,10 +54,10 @@ public class HiveTest implements Run {
 			// load data into table // NOTE: filepath has to be local to the
 			// hive server // NOTE: /tmp/a.txt is a ctrl-A separated file with
 			// two fields per line String filepath = "/tmp/a.txt";
-			sql = "load data inpath '" + filepath + "' into table "
-					+ tableName;
-			System.out.println("Running: " + sql);
-			res = stmt.executeQuery(sql);
+//			sql = "load data inpath '" + filepath + "' into table "
+//					+ tableName;
+//			System.out.println("Running: " + sql);
+//			res = stmt.executeQuery(sql);
 
 			// select * query
 			sql = "select * from " + tableName + " limit 10";
