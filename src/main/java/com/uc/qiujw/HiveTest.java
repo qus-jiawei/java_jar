@@ -33,13 +33,13 @@ public class HiveTest implements Run {
 					"jdbc:hive://"+host+":"+port+"/default", "", "");
 			Statement stmt = con.createStatement();
 			String tableName = "testHiveDriverTable";
-			stmt.executeQuery("drop table " + tableName);
-			ResultSet res = stmt.executeQuery("create table " + tableName
-					+ " (a string, b string, c string)");
+//			stmt.executeQuery("drop table " + tableName);
+//			ResultSet res = stmt.executeQuery("create table " + tableName
+//					+ " (a string, b string, c string)");
 			// show tables 
 			sql = "show tables '" + tableName + "'";
 			System.out.println("Running: " + sql);
-			res = stmt.executeQuery(sql);
+			ResultSet res = stmt.executeQuery(sql);
 			if (res.next()) {
 				System.out.println(res.getString(1));
 			}
