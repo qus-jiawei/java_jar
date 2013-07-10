@@ -24,7 +24,7 @@ public class Rm implements Run{
 				}
 				String path = args[0]+"_"+after;
 				System.out.println("delete "+path );
-//				fs.delete(new Path(path), true);
+				fs.delete(new Path(path), true);
 			}
 			
 		}
