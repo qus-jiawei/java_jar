@@ -25,7 +25,7 @@ public class TestLogger implements Run {
 				Object app = apps.nextElement();
 				System.out.println(app.getClass().getName());
 			}
-			
+			Thread.sleep(1000000);
 		} catch (Exception e) {
 
 		}
