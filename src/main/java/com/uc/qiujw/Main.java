@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Main {
-	static public Class<Run>[] runArray = new Class[]{Mkdir.class,WordCount.class,CalFairParams.class,HiveTest.class,Rm.class};
+	static public Class<Run>[] runArray = new Class[]{Mkdir.class,WordCount.class,CalFairParams.class,HiveTest.class,
+		Rm.class,TestLogger.class};
 	static public void main(String[] args){
 		try{
 			List<Run> runList = new ArrayList<Run>();
