@@ -19,29 +19,30 @@ public class MyEventWriter implements Run {
 	private final Object lock = new Object();
 
 	public int run(String[] args) {
+		EventWriter ew = null;
 		try {
-			int split = Integer.valueOf(args[0])*1000;
+			int split = Integer.valueOf(args[0]) * 1000;
 			boolean auto = false;
-			if( args[1].equals("true") ){
+			if (args[1].equals("true")) {
 				System.out.println("open the auto flush");
 				auto = true;
-			}
-			else{
+			} else {
 				System.out.println("close the auto flush");
 			}
-			
+
 			FileSystem fs = FileSystem.get(new Configuration());
+			String ts = Long.toString(System.currentTimeMillis());
 			FSDataOutputStream out = fs.create(
-					new Path("/tmp/eventwriter.log"), true);
-			EventWriter ew = new EventWriter(out);
+					new Path("/tmp/eventwriter.log"+ts), true);
+			ew = new EventWriter(out);
 			// JobID id, long launchTime, int totalMaps,
 			// int totalReduces, String jobStatus, boolean uberized
 			JobInitedEvent event = new JobInitedEvent(new JobID(
 					"job_1373357024953", 1), System.currentTimeMillis(), 10,
 					10, "finish", false);
 			int begin = 1000;
-//			int split = 60000;
-			if( auto ){
+			// int split = 60000;
+			if (auto) {
 				Timer timer = new Timer();
 				timer.schedule(new FlushTimerTask(ew), 30000);
 			}
@@ -49,13 +50,23 @@ public class MyEventWriter implements Run {
 				Thread.sleep(begin);
 				ew.write(event);
 				ew.flush();
-				System.out.println("main flush event at "+time());
+				System.out.println("main flush event at " + time());
 				begin += split;
 			}
-			
+
 			// EventWriter
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
+		} finally {
+			if (ew != null){
+				try{
+					ew.close();
+				}
+				catch(Exception e){
+					e.printStackTrace();
+				}
+				
+			}
 		}
 		return 0;
 	}
@@ -80,7 +91,7 @@ public class MyEventWriter implements Run {
 			synchronized (lock) {
 				try {
 					ew.flush();
-					System.out.println("auto flush event at "+time());
+					System.out.println("auto flush event at " + time());
 				} catch (IOException e) {
 					ioe = e;
 				}
