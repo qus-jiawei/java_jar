@@ -40,18 +40,16 @@ public class MyEventWriter implements Run {
 			JobInitedEvent event = new JobInitedEvent(new JobID(
 					"job_1373357024953", 1), System.currentTimeMillis(), 10,
 					10, "finish", false);
-			int begin = 1000;
-			// int split = 60000;
 			if (auto) {
 				Timer timer = new Timer();
 				timer.schedule(new FlushTimerTask(ew), 30000);
 			}
 			while (true) {
-				Thread.sleep(begin);
 				ew.write(event);
 				ew.flush();
 				System.out.println("main flush event at " + time());
-				begin += split;
+				Thread.sleep(split);
+//				begin += split;
 			}
 
 			// EventWriter
