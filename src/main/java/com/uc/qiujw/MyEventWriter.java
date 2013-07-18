@@ -21,7 +21,7 @@ public class MyEventWriter implements Run {
 
 	public int run(String[] args) {
 		try {
-
+			int split = Integer.valueOf(args[1])*1000;
 			FileSystem fs = FileSystem.get(new Configuration());
 			FSDataOutputStream out = fs.create(
 					new Path("/tmp/eventwriter.log"), true);
@@ -32,7 +32,7 @@ public class MyEventWriter implements Run {
 					"job_1373357024953", 1), System.currentTimeMillis(), 10,
 					10, "finish", false);
 			int begin = 1000;
-			int split = 30000;
+//			int split = 60000;
 			Timer timer = new Timer();
 			timer.schedule(new FlushTimerTask(ew), 30000);
 			while (true) {
