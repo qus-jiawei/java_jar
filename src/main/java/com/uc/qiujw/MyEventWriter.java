@@ -51,7 +51,7 @@ public class MyEventWriter implements Run {
 				ew.write(event);
 				unFlusheEventNumber++;
 				processEventForFlush(event,ew);
-//				System.out.println("main flush event at " + time());
+				System.out.println("push event at " + time() + " now eventNumebr is :"+unFlusheEventNumber);
 				Thread.sleep(split);
 				// begin += split;
 			}
@@ -97,6 +97,7 @@ public class MyEventWriter implements Run {
 			if (!isTimerActive) {
 				resetFlushTimer();
 				if (!isTimerShutDown) {
+					System.out.println("rebuild task");
 					flushTimerTask = new FlushTimerTask(ew);
 					flushTimer.schedule(flushTimerTask, flushTimeout);
 				}
@@ -105,12 +106,9 @@ public class MyEventWriter implements Run {
 	}
 
 	static public void resetFlushTimer() throws IOException {
+		System.out.println("reset fluse time");
 		if (flushTimerTask != null) {
-//			IOException exception = flushTimerTask.getException();
 			flushTimerTask.stop();
-//			if (exception != null) {
-//				throw exception;
-//			}
 			flushTimerTask = null;
 		}
 		isTimerActive = false;
