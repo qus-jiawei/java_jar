@@ -86,14 +86,7 @@ public class MyEventWriter implements Run {
 	static private long flushTimeout = 30000l;
 	static public void processEventForFlush(HistoryEvent historyEvent,EventWriter ew)
 			throws IOException {
-		if (EnumSet.of(EventType.MAP_ATTEMPT_FINISHED,
-				EventType.MAP_ATTEMPT_FAILED, EventType.MAP_ATTEMPT_KILLED,
-				EventType.REDUCE_ATTEMPT_FINISHED,
-				EventType.REDUCE_ATTEMPT_FAILED,
-				EventType.REDUCE_ATTEMPT_KILLED, EventType.TASK_FINISHED,
-				EventType.TASK_FAILED, EventType.JOB_FINISHED,
-				EventType.JOB_FAILED, EventType.JOB_KILLED).contains(
-				historyEvent.getEventType())) {
+		
 			if (!isTimerActive) {
 				resetFlushTimer();
 				if (!isTimerShutDown) {
@@ -101,7 +94,7 @@ public class MyEventWriter implements Run {
 					flushTimerTask = new FlushTimerTask(ew);
 					flushTimer.schedule(flushTimerTask, flushTimeout);
 				}
-			}
+			
 		}
 	}
 
