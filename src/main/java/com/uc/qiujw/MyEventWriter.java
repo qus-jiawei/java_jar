@@ -17,11 +17,19 @@ import util.EventWriter;
 
 public class MyEventWriter implements Run {
 	private final Object lock = new Object();
-	private boolean isTimerActive;
 
 	public int run(String[] args) {
 		try {
-			int split = Integer.valueOf(args[1])*1000;
+			int split = Integer.valueOf(args[0])*1000;
+			boolean auto = false;
+			if( args[1].equals("true") ){
+				System.out.println("open the auto flush");
+				auto = true;
+			}
+			else{
+				System.out.println("close the auto flush");
+			}
+			
 			FileSystem fs = FileSystem.get(new Configuration());
 			FSDataOutputStream out = fs.create(
 					new Path("/tmp/eventwriter.log"), true);
@@ -33,13 +41,15 @@ public class MyEventWriter implements Run {
 					10, "finish", false);
 			int begin = 1000;
 //			int split = 60000;
-			Timer timer = new Timer();
-			timer.schedule(new FlushTimerTask(ew), 30000);
+			if( auto ){
+				Timer timer = new Timer();
+				timer.schedule(new FlushTimerTask(ew), 30000);
+			}
 			while (true) {
 				Thread.sleep(begin);
 				ew.write(event);
 				ew.flush();
-				System.out.println("flush at "+time());
+				System.out.println("main flush event at "+time());
 				begin += split;
 			}
 			
@@ -70,6 +80,7 @@ public class MyEventWriter implements Run {
 			synchronized (lock) {
 				try {
 					ew.flush();
+					System.out.println("auto flush event at "+time());
 				} catch (IOException e) {
 					ioe = e;
 				}
@@ -83,7 +94,7 @@ public class MyEventWriter implements Run {
 	}
 
 	public String getKey() {
-		return "eventw";
+		return "eventwriter";
 	}
 
 }
